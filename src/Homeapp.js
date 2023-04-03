@@ -25,10 +25,7 @@ import './Homeapp.css'
 import HeaderLogo from './components/HeaderLogo';
 import NavMenuResponsive from './components/NavMenuResponsive';
 import NavMenu from './components/NavMenu';
-
-
-
-
+import CardWithAction from './components/CardWithAction';
 
 const drawerWidth = 240;
 
@@ -47,7 +44,7 @@ function DrawerAppBar(props) {
       </Typography>
 
       <Divider />
-      <NavMenuResponsive/>
+      <NavMenuResponsive />
     </Box>
   );
 
@@ -77,7 +74,7 @@ function DrawerAppBar(props) {
             <MenuIcon />
           </IconButton>
           <HeaderLogo />
-          <NavMenu/>
+          <NavMenu />
         </Toolbar>
       </AppBar>
       <Box component="nav">
@@ -104,67 +101,35 @@ function DrawerAppBar(props) {
 
           <Grid container spacing={8} justifyContent="center">
             <Grid item xs={12} md={6} lg={6}>
-              <Item> <div>
-
-                <Card sx={{ maxwidth: "512px" }}>
-                  <Link href="FoodMenu3_5">
-                    <CardActionArea>
-                      <CardMedia
-                        component="img"
-                        height="400"
-                        image="/logo.png" />
-
-                      <CardContent>
-                        <Typography gutterBottom variant="h4" component="div">
-                          สำรับอาหารวัย 3-5 ปี
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                  </Link>
-                  {/* <CardActions>
-                    <Link href="FoodMenu3_5">
-                      <Button size="medium" color="primary">
-                        เลือก
-                      </Button>
-                    </Link>
-                  </CardActions> */}
-                </Card>
-              </div>
+              <Item>
+                <div>
+                  <CardWithAction
+                    maxWidth='512px'
+                    imgHeight='400'
+                    img="/logo.png"
+                    actionLink="FoodMenu3_5"
+                    title="สำรับอาหารวัย 3-5 ปี"
+                    textButton="เลือก"
+                  />
+                </div>
 
               </Item>
             </Grid>
             <Grid item xs={12} md={6} lg={6}>
-              <Item> <div>
-                <Card sx={{ maxwidth: "512px" }}>
-                  <Link href="FoodMenu6_12">
-                    <CardActionArea>
-                      <CardMedia
-                        component="img"
-                        height="400"
-                        image="/logo.png" />
-                      <CardContent>
-                        <Typography gutterBottom variant="h4" component="div">
-                          สำรับอาหารวัย 6-12 ปี
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                  </Link>
-                  {/* <CardActions>
-                    <Link href="FoodMenu6_12">
-                      <Button size="medium" color="primary">
-                        เลือก
-                      </Button>
-                    </Link>
-                  </CardActions> */}
-                </Card>
-              </div>
-
+              <Item>
+                <div>
+                  <CardWithAction
+                    maxWidth='512px'
+                    imgHeight='400'
+                    img="/logo.png"
+                    actionLink="FoodMenu6_12"
+                    title="สำรับอาหารวัย 6-12 ปี"
+                    textButton="เลือก"
+                  />
+                </div>
               </Item>
             </Grid>
           </Grid>
-
-
-
         </Box>
       </div></>
   );

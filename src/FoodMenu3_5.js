@@ -24,6 +24,7 @@ import Link from '@mui/material/Link';
 import HeaderLogo from './components/HeaderLogo';
 import NavMenuResponsive from './components/NavMenuResponsive';
 import NavMenu from './components/NavMenu';
+import CardWithAction from './components/CardWithAction';
 
 
 
@@ -50,9 +51,8 @@ function DrawerAppBar(props) {
             <Typography variant="h6" sx={{ my: 2 }}>
                 Food For Child
             </Typography>
-
             <Divider />
-<NavMenuResponsive/>
+            <NavMenuResponsive />
         </Box>
     );
 
@@ -81,8 +81,8 @@ function DrawerAppBar(props) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <HeaderLogo/>
-<NavMenu/>
+                    <HeaderLogo />
+                    <NavMenu />
                 </Toolbar>
             </AppBar>
             <Box component="nav">
@@ -111,91 +111,41 @@ function DrawerAppBar(props) {
                         <Grid container spacing={6}>
                             <Grid item xs={12} sm={6} md={4}>
                                 <Item><div>
-                                    <Card sx={{ maxWidth: 'auto' }}>
-                                        <CardActionArea>
-                                            <CardMedia
-                                                component="img"
-                                            
-                                                height="200"
-                                                image="/Letter.png" />
-                                            <CardContent>
-                                                <Typography gutterBottom variant="h5" component="div">
-                                                    สำรับแนะนำจากระบบ
-                                                </Typography>
-                                            </CardContent>
-                                        </CardActionArea>
-                                      
-                                        <CardActions >
-                                            <Link href="FoodRec3_5">
-
-
-                                                <Button color="primary" >
-                                                    เลือก
-                                                </Button>
-                                            </Link>
-                                        </CardActions>
-                          
-                                    </Card>
+                                    <CardWithAction
+                                        img="/Letter.png"
+                                        actionLink="FoodRec3_5"
+                                        title="สำรับแนะนำจากระบบ"
+                                        textButton="เลือก"
+                                    />
                                 </div>
                                 </Item>
                             </Grid>
                             <Grid item xs={12} sm={6} md={4}>
-                                <Item><div>
-                                    <Card sx={{ maxWidth: 'auto' }}>
-                                        <CardActionArea>
-                                            <CardMedia
-                                                component="img"
-                                                height="200"
-                                                image="/Fav.png" />
-                                            <CardContent>
-                                                <Typography gutterBottom variant="h5" component="div">
-                                                    สำรับอาหารโปรด
-                                                </Typography>
-                                            </CardContent>
-                                        </CardActionArea>
-                                        <CardActions>
-                                            <Link href="FoodFav3_5">
-
-                                                <Button size="medium" color="primary">
-                                                    เลือก
-                                                </Button>
-                                            </Link>
-                                        </CardActions>
-                                    </Card>
-                                </div>
+                                <Item>
+                                    <div>
+                                        <CardWithAction
+                                            img="/Fav.png"
+                                            actionLink="FoodFav3_5"
+                                            title="สำรับอาหารโปรด"
+                                            textButton="เลือก"
+                                        />
+                                    </div>
                                 </Item>
                             </Grid>
                             <Grid item xs={12} sm={6} md={4}>
-                                <Item><div>
-                                    <Card sx={{ maxWidth: 'auto' }}>
-                                        <CardActionArea>
-                                            <CardMedia
-                                                component="img"
-                                                height="200"
-                                                image="/Search.png" />
-                                            <CardContent>
-                                                <Typography gutterBottom variant="h5" component="div">
-                                                    ค้นหารายชื่ออาหาร
-                                                </Typography>
-                                            </CardContent>
-                                        </CardActionArea>
-                                        <CardActions>
-                                            <Link href="FoodSearch3_5">
-
-
-                                                <Button size="medium" color="primary">
-                                                    เลือก
-                                                </Button>
-                                            </Link>
-                                        </CardActions>
-                                    </Card>
-                                </div>
+                                <Item>
+                                    <div>
+                                        <CardWithAction
+                                            img="/Search.png"
+                                            actionLink="FoodSearch3_5"
+                                            title="ค้นหารายชื่ออาหาร"
+                                            textButton="เลือก"
+                                        />
+                                    </div>
                                 </Item>
                             </Grid>
                         </Grid>
-
                     </Box>
-
                 </Typography>
             </Box></>
     );
