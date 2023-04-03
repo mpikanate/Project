@@ -17,6 +17,8 @@ import { experimentalStyled as styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import HeaderLogo from './components/HeaderLogo';
+import NavMenuResponsive from './components/NavMenuResponsive';
+import NavMenu from './components/NavMenu';
 
 const drawerWidth = 240;
 const navItems = [
@@ -41,15 +43,7 @@ function DrawerAppBar(props) {
             </Typography>
 
             <Divider />
-            <List>
-                {navItems.map((item) => (
-                    <ListItem key={item.name} disablePadding>
-                        <ListItemButton sx={{ textAlign: 'center' }}>
-                            <a href={item.target}><ListItemText primary={item.name} /></a>
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
+<NavMenuResponsive/>
         </Box>
     );
 
@@ -79,13 +73,7 @@ function DrawerAppBar(props) {
                         <MenuIcon />
                     </IconButton>
                     <HeaderLogo/>
-                    <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                        {navItems.map((item) => (
-                            <Button key={item.name} sx={{ color: '#fff' }}>
-                                <a href={item.target}>{item.name}</a>
-                            </Button>
-                        ))}
-                    </Box>
+<NavMenu/>
                 </Toolbar>
             </AppBar>
             <Box component="nav">

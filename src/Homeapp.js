@@ -23,19 +23,14 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import './Homeapp.css'
 import HeaderLogo from './components/HeaderLogo';
+import NavMenuResponsive from './components/NavMenuResponsive';
+import NavMenu from './components/NavMenu';
 
 
 
 
 
 const drawerWidth = 240;
-
-const navItems = [
-  { name: 'หน้าหลัก', target: '/Homeapp' },
-  { name: 'วิเคราะห์น้ำหนัก-ส่วนสูง', target: '/Weight_Height' },
-  { name: 'สำรับอาหาร', target: '/page3' },
-  { name: 'โปรไฟล์', target: '/profile' }
-];
 
 function DrawerAppBar(props) {
   const { window } = props;
@@ -52,15 +47,7 @@ function DrawerAppBar(props) {
       </Typography>
 
       <Divider />
-      <List>
-        {navItems.map((item) => (
-          <ListItem key={item.name} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
-              <a href={item.target}><ListItemText primary={item.name} /></a>
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+      <NavMenuResponsive/>
     </Box>
   );
 
@@ -90,13 +77,7 @@ function DrawerAppBar(props) {
             <MenuIcon />
           </IconButton>
           <HeaderLogo />
-          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            {navItems.map((item) => (
-              <Button key={item.name} sx={{ color: '#fff' }}>
-                <a href={item.target}>{item.name}</a>
-              </Button>
-            ))}
-          </Box>
+          <NavMenu/>
         </Toolbar>
       </AppBar>
       <Box component="nav">
@@ -140,13 +121,13 @@ function DrawerAppBar(props) {
                       </CardContent>
                     </CardActionArea>
                   </Link>
-                  <CardActions>
+                  {/* <CardActions>
                     <Link href="FoodMenu3_5">
                       <Button size="medium" color="primary">
                         เลือก
                       </Button>
                     </Link>
-                  </CardActions>
+                  </CardActions> */}
                 </Card>
               </div>
 
@@ -155,26 +136,26 @@ function DrawerAppBar(props) {
             <Grid item xs={12} md={6} lg={6}>
               <Item> <div>
                 <Card sx={{ maxwidth: "512px" }}>
-                  <CardActionArea>
-                    <CardMedia
-                      component="img"
-                      height="400"
-                      image="/logo.png" />
-
-                    <CardContent>
-
-                      <Typography gutterBottom variant="h4" component="div">
-                        สำรับอาหารวัย 6-12 ปี
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                  <CardActions>
+                  <Link href="FoodMenu6_12">
+                    <CardActionArea>
+                      <CardMedia
+                        component="img"
+                        height="400"
+                        image="/logo.png" />
+                      <CardContent>
+                        <Typography gutterBottom variant="h4" component="div">
+                          สำรับอาหารวัย 6-12 ปี
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Link>
+                  {/* <CardActions>
                     <Link href="FoodMenu6_12">
                       <Button size="medium" color="primary">
                         เลือก
                       </Button>
                     </Link>
-                  </CardActions>
+                  </CardActions> */}
                 </Card>
               </div>
 

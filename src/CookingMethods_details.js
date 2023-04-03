@@ -31,6 +31,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import CssBaseline from '@mui/material/CssBaseline';
 import HeaderLogo from './components/HeaderLogo';
+import NavMenuResponsive from './components/NavMenuResponsive';
+import NavMenu from './components/NavMenu';
 
 
 
@@ -56,20 +58,12 @@ function DrawerAppBar(props) {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Typography variant="h6"  sx={{ my: 2 }}>
+      <Typography variant="h6" sx={{ my: 2 }}>
         Food For Child
       </Typography>
 
       <Divider />
-      <List>
-        {navItems.map((item) => (
-          <ListItem key={item.name} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
-              <a href={item.target}><ListItemText primary={item.name} /></a>
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+<NavMenuResponsive/>
     </Box>
   );
 
@@ -86,12 +80,12 @@ function DrawerAppBar(props) {
   function createData(name, calories, fat, carbs, protein) {
     return { name, calories, fat, carbs, protein };
   }
-  
+
   const rows = [
-    
+
     createData('ข้าวสวยแกงจืดฟักหมูสับ ไข่ตุ๋น แอปเปิล', 356, 16.0, 49, 3.9)
   ];
-  
+
 
 
   return (
@@ -107,15 +101,9 @@ function DrawerAppBar(props) {
           >
             <MenuIcon />
           </IconButton>
-          
-          <HeaderLogo/>
-          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            {navItems.map((item) => (
-              <Button key={item.name} sx={{ color: '#fff' }}>
-                <a href={item.target}>{item.name}</a>
-              </Button>
-            ))}
-          </Box>
+
+          <HeaderLogo />
+          <NavMenu />
         </Toolbar>
       </AppBar>
       <Box component="nav">
@@ -138,39 +126,39 @@ function DrawerAppBar(props) {
 
 
     </Box>
-    <br>
-    </br>
-    <br>
-    </br>
-    <br>
-    </br>
-    <br>
-    </br>
-    <br>
-    </br>
-    <center>
+      <br>
+      </br>
+      <br>
+      </br>
+      <br>
+      </br>
+      <br>
+      </br>
+      <br>
+      </br>
+      <center>
         <div>
           <h1>
             สำรับอาหารที่ 1
           </h1>
           <h1>
-          ข้าวสวยแกงจืดฟักหมูสับ ไข่ตุ๋น แอปเปิล
+            ข้าวสวยแกงจืดฟักหมูสับ ไข่ตุ๋น แอปเปิล
           </h1>
         </div>
         <Typography variant="subtitle1" gutterBottom>
-        แกงจืดฟักหมูสับ<br></br>
-1. นําฟักเขียว แครอท และเห็ดหอมสดล้างนํ้าให้สะอาด<br></br>
-2. ปอกเปลือกและหั่นฟักเขียว แครอท เห็ดหอม เตรียมไว้<br></br>
-3. หมักหมูด้วยซีอิ๊วขาว<br></br>
-4. ใส่นํ้าลงในหม้อ ยกขึ้นบนเตาไฟจนเดือด ใส่หมูหมักปั้นเป็นก้อนๆ ลงไป<br></br>
-5. ใส่ฟักเขียว แครอท และเห็ดหอมลงไปต้มจนสุก<br></br>
-6. โรยด้วยต้นหอมผักชีพร้อมเสิร์ฟ<br></br>
-ไข่ตุ๋น<br></br>
-1. ตีไข่ลงในชาม เติมนํ้าเปล่าและซีอิ๊วขาวคนให้เข้ากัน โดยวิธีทําไข่ตุ๋นให้เนียน
-นั้นคือการนําไข่ไปกรองผ่านกระชอนก่อน 1 ครั้ง<br></br>
-2. ใส่แครอทหั่นเต๋าลงไปในถ้วยที่จะใช้นึ่งไข่<br></br>
-3. ใสไข่ ที่กรองผ่าานกระชอนลงไปในถ้วย แล้วนำไขํตุ๋นไปนึ่งประมาณ 20-30 นาที<br></br>
-      </Typography>
+          แกงจืดฟักหมูสับ<br></br>
+          1. นําฟักเขียว แครอท และเห็ดหอมสดล้างนํ้าให้สะอาด<br></br>
+          2. ปอกเปลือกและหั่นฟักเขียว แครอท เห็ดหอม เตรียมไว้<br></br>
+          3. หมักหมูด้วยซีอิ๊วขาว<br></br>
+          4. ใส่นํ้าลงในหม้อ ยกขึ้นบนเตาไฟจนเดือด ใส่หมูหมักปั้นเป็นก้อนๆ ลงไป<br></br>
+          5. ใส่ฟักเขียว แครอท และเห็ดหอมลงไปต้มจนสุก<br></br>
+          6. โรยด้วยต้นหอมผักชีพร้อมเสิร์ฟ<br></br>
+          ไข่ตุ๋น<br></br>
+          1. ตีไข่ลงในชาม เติมนํ้าเปล่าและซีอิ๊วขาวคนให้เข้ากัน โดยวิธีทําไข่ตุ๋นให้เนียน
+          นั้นคือการนําไข่ไปกรองผ่านกระชอนก่อน 1 ครั้ง<br></br>
+          2. ใส่แครอทหั่นเต๋าลงไปในถ้วยที่จะใช้นึ่งไข่<br></br>
+          3. ใสไข่ ที่กรองผ่าานกระชอนลงไปในถ้วย แล้วนำไขํตุ๋นไปนึ่งประมาณ 20-30 นาที<br></br>
+        </Typography>
       </center></>
   );
 }
