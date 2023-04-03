@@ -23,6 +23,7 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
+import HeaderLogo from './components/HeaderLogo';
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -115,13 +116,7 @@ function DrawerAppBar(props) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography
-                        variant="h6"
-                        component="div"
-                        sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-                    >
-                        Food For Child
-                    </Typography>
+                    <HeaderLogo/>
                     <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                         {navItems.map((item) => (
                             <Button key={item.name} sx={{ color: '#fff' }}>

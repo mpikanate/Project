@@ -16,6 +16,7 @@ import Button from '@mui/material/Button';
 import { experimentalStyled as styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import HeaderLogo from './components/HeaderLogo';
 
 const drawerWidth = 240;
 const navItems = [
@@ -77,13 +78,7 @@ function DrawerAppBar(props) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography
-                        variant="h6"
-                        component="div"
-                        sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-                    >
-                        Food For Child
-                    </Typography>
+                    <HeaderLogo/>
                     <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                         {navItems.map((item) => (
                             <Button key={item.name} sx={{ color: '#fff' }}>

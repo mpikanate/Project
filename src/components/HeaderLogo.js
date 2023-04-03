@@ -8,8 +8,11 @@ const HeaderLogo = () => {
             variant="h6"
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+            onClick={()=>{
+                window.location.href = "/Homeapp"
+            }}
           >
-            Food For Child
+            <span  style={{ cursor: 'pointer'}}>Food For Child</span>
           </Typography>
     )
 }

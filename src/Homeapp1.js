@@ -23,13 +23,8 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Dialog from '@mui/material/Dialog';
 import CloseIcon from '@mui/icons-material/Close';
-import Slide from '@mui/material/Slide';
+import HeaderLogo from './components/HeaderLogo';
 
-
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
 
 const drawerWidth = 240;
 
@@ -92,13 +87,7 @@ function DrawerAppBar(props) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography
-                        variant="h6"
-                        component="div"
-                        sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-                    >
-                        Food For Child
-                    </Typography>
+                    <HeaderLogo/>
                     <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                         {navItems.map((item) => (
                             <Button key={item.name} sx={{ color: '#fff' }}>

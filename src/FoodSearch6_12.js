@@ -25,6 +25,7 @@ import TextField from '@mui/material/TextField';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import HeaderLogo from './components/HeaderLogo';
 
 import "./FoodSearch3_5.css"
 
@@ -92,13 +93,8 @@ function DrawerAppBar(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-          >
-            Food For Child
-          </Typography>
+          
+          <HeaderLogo/>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
               <Button key={item.name} sx={{ color: '#fff' }}>
