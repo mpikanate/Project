@@ -1,8 +1,19 @@
 
 import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Link, Typography } from '@mui/material';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import React from 'react';
 
-const CardWithAction = ({ maxWidth = 'auto', img = "", imgHeight = '200', actionLink = "", title = "", textButton = "" }) => {
+const CardWithAction = ({
+    maxWidth = 'auto',
+    img = "",
+    imgHeight = '200',
+    actionLink = "",
+    title = "",
+    titleSize = "20px",
+    textButton = "",
+    isFavourite = false,
+    handleFavouriteAction = () => { }
+}) => {
     return (
         <Card sx={{ maxWidth: 'maxWidth' }}>
             <Link href={actionLink}>
@@ -12,9 +23,9 @@ const CardWithAction = ({ maxWidth = 'auto', img = "", imgHeight = '200', action
                         height={imgHeight}
                         image={img} />
                     <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
+                        <div style={{fontSize: titleSize}}>
                             {title}
-                        </Typography>
+                        </div>
                     </CardContent>
                 </CardActionArea>
             </Link>
@@ -24,6 +35,10 @@ const CardWithAction = ({ maxWidth = 'auto', img = "", imgHeight = '200', action
                         {textButton}
                     </Button>
                 </Link>
+                {isFavourite && <Button onClick={handleFavouriteAction}>
+                    <FavoriteBorderIcon>
+                    </FavoriteBorderIcon>
+                </Button>}
             </CardActions>
         </Card>
     )
