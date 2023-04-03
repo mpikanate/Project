@@ -16,6 +16,8 @@
     "cros": "^1.0.1",
     "dayjs": "^1.11.7",
     "express": "^4.18.2",
+    "lodash": "^4.17.21",
+    "nookies": "^2.5.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^5.2.0",

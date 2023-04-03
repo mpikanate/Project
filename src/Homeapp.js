@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -26,6 +26,7 @@ import HeaderLogo from './components/HeaderLogo';
 import NavMenuResponsive from './components/NavMenuResponsive';
 import NavMenu from './components/NavMenu';
 import CardWithAction from './components/CardWithAction';
+import { retrieveProfile } from 'utils/auth';
 
 const drawerWidth = 240;
 
@@ -58,7 +59,10 @@ function DrawerAppBar(props) {
     color: theme.palette.text.secondary,
   }));
 
-
+  useEffect(() => {
+    const profile = retrieveProfile()
+    console.log("profile: ", profile)
+  }, [])
 
   return (
     <><Box sx={{ width: 'auto', display: 'flex' }}>

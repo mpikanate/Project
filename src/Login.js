@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,6 +14,8 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import background from "./bg.png";
+import { clearToken, saveProfile } from 'utils/auth';
+import { get } from 'lodash';
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -34,6 +36,10 @@ export default function Login() {
 
   const emailRef = useRef('email')
   const passwordRef = useRef('password')
+  
+  useEffect(() => {
+    clearToken()
+  }, [])
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -43,23 +49,36 @@ export default function Login() {
       email: email,
       password: password
     }
-    console.log("body: ", body)
 
     // Call Api
     axios.post(`${API_URL}/api/user/login`, body)
       .then(function (response) {
-        console.log(response);
-        toast.success('Success!', {
-          position: "bottom-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
+        const { data, status } = response
+        if (status == 200) {
+          toast.success('Success!', {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
           });
-        window.location.href = '/homeapp'
+          saveProfile(get(data, 'data', {}))
+          window.location.href = '/homeapp'
+        } else {
+          toast.error('Email or Password was incorrect!', {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
       })
       .catch(function (error) {
         console.log(error);
@@ -72,7 +91,7 @@ export default function Login() {
           draggable: true,
           progress: undefined,
           theme: "light",
-          });
+        });
       });
 
 
@@ -106,14 +125,14 @@ export default function Login() {
         />
 
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square backgroundImage>
-          <Box 
+          <Box
             sx={{
               my: 8,
               mx: 4,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-             
+
             }}
 
           >
@@ -152,7 +171,7 @@ export default function Login() {
 
               {/* <Link href="Homeapp"> */}
 
-            
+
               <Button
                 fullWidth
                 variant="contained"
