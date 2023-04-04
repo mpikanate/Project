@@ -30,11 +30,14 @@ import CardWithAction from './components/CardWithAction';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { get, size } from 'lodash';
+import { toast } from 'react-toastify';
+import { retrieveProfile } from 'utils/auth';
 const API_URL = process.env.REACT_APP_API_ENDPOINT;
 const drawerWidth = 240;
 
 function DrawerAppBar(props) {
-  const { window } = props;
+  const profile = retrieveProfile()
+  const { windowProp } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
@@ -51,7 +54,7 @@ function DrawerAppBar(props) {
     </Box>
   );
 
-  const container = window !== undefined ? () => window().document.body : undefined;
+  const container = windowProp !== undefined ? () => windowProp().document.body : undefined;
 
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -125,7 +128,7 @@ function DrawerAppBar(props) {
             <center>
               <h1>
                 สำรับแนะนำจากระบบ
-                <Button onClick={async ()=>{
+                <Button onClick={async () => {
                   await fetchFoodData({
                     age_group: 3
                   })
@@ -139,8 +142,10 @@ function DrawerAppBar(props) {
             {
               size(productList) > 0 ?
                 <Grid container spacing={6}>
-                  {productList.map((item) => (
-                    <Grid item xs={12} sm={6} md={4}>
+                  {productList.map((item) => {
+                    const foodId = item["FoodID"]
+                    const userId = profile["id"]
+                    return <Grid item xs={12} sm={6} md={4}>
                       <Item>
                         <div>
                           <CardWithAction
@@ -150,14 +155,13 @@ function DrawerAppBar(props) {
                             titleSize="16px"
                             textButton="เลือก"
                             isFavourite={true}
-                            handleFavouriteAction={() => {
-                              console.log("Fav!")
-                            }}
+                            foodId={foodId}
+                            userId={userId}
                           />
                         </div>
                       </Item>
                     </Grid>
-                  ))}
+                  })}
                 </Grid>
                 :
                 <Box component="main" sx={{ p: 2 }}>
@@ -182,7 +186,7 @@ DrawerAppBar.propTypes = {
    * Injected by the documentation to work in an iframe.
    * You won't need it on your project.
    */
-  window: PropTypes.func,
+  windowProp: PropTypes.func,
 };
 
 export default DrawerAppBar;

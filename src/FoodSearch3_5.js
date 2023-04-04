@@ -33,6 +33,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { get, size } from 'lodash';
 import CardWithAction from './components/CardWithAction';
+import { retrieveProfile } from 'utils/auth';
 const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
 
@@ -48,6 +49,7 @@ const navItems = [
 ];
 
 function DrawerAppBar(props) {
+  const profile = retrieveProfile()
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -79,23 +81,9 @@ function DrawerAppBar(props) {
   const [productList, setProductList] = useState([])
   const [searchFood, setSearchFood] = useState("")
 
-  const fetchFoodData = async (request) => {
-    // Call Api
-    axios.post(`${API_URL}/api/food/find-by-age-group`, request)
-      .then(function (response) {
-        const { data, status } = response
-        if (status == 200) {
-          setProductList(get(data, "data", []))
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
-
   const fetchFoodDataByName = async (request) => {
     // Call Api
-    axios.post(`${API_URL}/api/food/find-by-name`, request)
+    axios.post(`${API_URL}/api/food/find-by-age-group-and-name`, request)
       .then(function (response) {
         const { data, status } = response
         if (status == 200) {
@@ -108,9 +96,9 @@ function DrawerAppBar(props) {
   }
 
   useEffect(() => {
-    fetchFoodData({
+    fetchFoodDataByName({
       age_group: 3,
-      limit: 100
+      name: searchFood
     })
   }, [])
 
@@ -172,9 +160,10 @@ function DrawerAppBar(props) {
                 e.preventDefault()
                 setSearchFood(e.target.value)
               }}
-              onKeyDown={async (e)=>{
+              onKeyDown={async (e) => {
                 if (e.key == 'Enter') {
                   await fetchFoodDataByName({
+                    age_group: 3,
                     name: searchFood
                   })
                 }
@@ -186,6 +175,7 @@ function DrawerAppBar(props) {
               aria-label="search"
               onClick={async () => {
                 await fetchFoodDataByName({
+                  age_group: 3,
                   name: searchFood
                 })
               }}
@@ -204,8 +194,10 @@ function DrawerAppBar(props) {
           {
             size(productList) > 0 ?
               <Grid container spacing={6}>
-                {productList.map((item) => (
-                  <Grid item xs={12} sm={6} md={4}>
+                {productList.map((item) => {
+                  const foodId = item["FoodID"]
+                  const userId = profile["id"]
+                  return <Grid item xs={12} sm={6} md={4}>
                     <Item>
                       <div>
                         <CardWithAction
@@ -215,14 +207,13 @@ function DrawerAppBar(props) {
                           titleSize="16px"
                           textButton="เลือก"
                           isFavourite={true}
-                          handleFavouriteAction={() => {
-                            console.log("Fav!")
-                          }}
+                          foodId={foodId}
+                          userId={userId}
                         />
                       </div>
                     </Item>
                   </Grid>
-                ))}
+                })}
               </Grid>
               :
               <Box component="main" sx={{ p: 2 }}>
