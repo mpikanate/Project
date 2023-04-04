@@ -26,18 +26,12 @@ import AutorenewIcon from '@mui/icons-material/Autorenew';
 import HeaderLogo from './components/HeaderLogo';
 import NavMenuResponsive from './components/NavMenuResponsive';
 import NavMenu from './components/NavMenu';
-
-
-
-
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { get, size } from 'lodash';
+import CardWithAction from './components/CardWithAction';
+const API_URL = process.env.REACT_APP_API_ENDPOINT;
 const drawerWidth = 240;
-
-const navItems = [
-  { name: 'หน้าหลัก', target: '/Homeapp' },
-  { name: 'วิเคราะห์น้ำหนัก-ส่วนสูง', target: '/page2' },
-  { name: 'สำรับอาหาร', target: '/page3' },
-  { name: 'โปรไฟล์', target: '/profile' }
-];
 
 function DrawerAppBar(props) {
   const { window } = props;
@@ -52,9 +46,8 @@ function DrawerAppBar(props) {
       <Typography variant="h6" sx={{ my: 2 }}>
         Food For Child
       </Typography>
-
       <Divider />
-<NavMenuResponsive/>
+      <NavMenuResponsive />
     </Box>
   );
 
@@ -68,7 +61,28 @@ function DrawerAppBar(props) {
     color: theme.palette.text.secondary,
   }));
 
+  const [productList, setProductList] = useState([])
 
+  const fetchFoodData = async (request) => {
+    // Call Api
+    axios.post(`${API_URL}/api/food/find-by-age-group`, request)
+      .then(function (response) {
+        const { data, status } = response
+        if (status == 200) {
+          console.log("data: ", data);
+          setProductList(get(data, "data", []))
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  useEffect(() => {
+    fetchFoodData({
+      age_group: 6
+    })
+  }, [])
 
   return (
     <><Box sx={{ width: 'auto', display: 'flex' }}>
@@ -83,9 +97,9 @@ function DrawerAppBar(props) {
           >
             <MenuIcon />
           </IconButton>
-          
-          <HeaderLogo/>
-<NavMenu/>
+
+          <HeaderLogo />
+          <NavMenu />
         </Toolbar>
       </AppBar>
       <Box component="nav">
@@ -109,130 +123,56 @@ function DrawerAppBar(props) {
       <div>
         <Box component="main" sx={{ p: 2 }}>
           <Toolbar />
-         <div>
-          <center>
-          <h1>
-              สำรับแนะนำจากระบบ
-              <Button>
-              <img src="/refresh.png" width={50} height={50} />
-              </Button>
-            </h1>
-          </center>
-         
-           
-         </div>
-           
-           
-         
+          <div>
+            <center>
+              <h1>
+                สำรับแนะนำจากระบบ
+                <Button onClick={async () => {
+                  await fetchFoodData({
+                    age_group: 6
+                  })
+                }}>
+                  <img src="/refresh.png" width={50} height={50} />
+                </Button>
+              </h1>
+            </center>
+          </div>
           <Box>
-            <Grid container spacing={6}>
-
-              <Grid item xs={12} sm={6} md={4}>
-                <Item><div>
-                  <Card sx={{ maxWidth: 'auto' }}>
-                    <CardActionArea>
-                      <CardMedia
-                        component="img"
-                        height="200"
-                        image="/food.png" />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                          สำรับอาหารที่ 1
-
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                    <CardActions>
-                      <Link href="page8">
-
-
-                        <Button size="medium" color="primary">
-                          เลือก
-                        </Button>
-
-                      </Link>
-
-                      <Button>
-                        <FavoriteBorderIcon>
-
-                        </FavoriteBorderIcon>
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </div>
-                </Item>
-              </Grid>
-              <Grid item xs={12} sm={6} md={4}>
-                <Item><div>
-                  <Card sx={{ maxWidth: 'auto' }}>
-                    <CardActionArea>
-                      <CardMedia
-                        component="img"
-                        height="200"
-                        image="/food.png" />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                          สำรับอาหารที่ 2
-                        </Typography>
-
-                      </CardContent>
-                    </CardActionArea>
-                    <CardActions>
-                      <Link href="page8">
-
-
-                        <Button size="medium" color="primary">
-                          เลือก
-                        </Button>
-                      </Link>
-                      <Button>
-                        <FavoriteBorderIcon>
-
-                        </FavoriteBorderIcon>
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </div>
-                </Item>
-              </Grid>
-              <Grid item xs={12} sm={6} md={4}>
-                <Item><div>
-                  <Card sx={{ maxWidth: 'auto' }}>
-                    <CardActionArea>
-                      <CardMedia
-                        component="img"
-                        width={200} height={200}
-                        image="/food.png" />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                          สำรับอาหารที่ 3
-
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                    <CardActions>
-                      <Link href="page8">
-
-
-                        <Button size="medium" color="primary">
-                          เลือก
-                        </Button>
-                      </Link>
-                      <Button>
-                        <FavoriteBorderIcon>
-
-                        </FavoriteBorderIcon>
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </div>
-                </Item>
-              </Grid>
-
-            </Grid>
           </Box>
-
-
+          {
+            size(productList) > 0 ?
+              <Grid container spacing={6}>
+                {productList.map((item) => (
+                  <Grid item xs={12} sm={6} md={4}>
+                    <Item>
+                      <div>
+                        <CardWithAction
+                          img="/food.png"
+                          actionLink={`food/${item["FoodID"]}`}
+                          title={item["Name"]}
+                          titleSize="16px"
+                          textButton="เลือก"
+                          isFavourite={true}
+                          handleFavouriteAction={() => {
+                            console.log("Fav!")
+                          }}
+                        />
+                      </div>
+                    </Item>
+                  </Grid>
+                ))}
+              </Grid>
+              :
+              <Box component="main" sx={{ p: 2 }}>
+                <div>
+                  <center>
+                    <p>
+                      ไม่พบข้อมูล
+                    </p>
+                  </center>
+                </div>
+              </Box>
+          }
         </Box>
       </div></>
   );

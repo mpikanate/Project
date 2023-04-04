@@ -30,16 +30,8 @@ import CardWithAction from './components/CardWithAction';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { get, size } from 'lodash';
-
 const API_URL = process.env.REACT_APP_API_ENDPOINT;
 const drawerWidth = 240;
-
-const navItems = [
-  { name: 'หน้าหลัก', target: '/Homeapp' },
-  { name: 'วิเคราะห์น้ำหนัก-ส่วนสูง', target: '/page2' },
-  { name: 'สำรับอาหาร', target: '/page3' },
-  { name: 'โปรไฟล์', target: '/profile' }
-];
 
 function DrawerAppBar(props) {
   const { window } = props;
@@ -54,7 +46,6 @@ function DrawerAppBar(props) {
       <Typography variant="h6" sx={{ my: 2 }}>
         Food For Child
       </Typography>
-
       <Divider />
       <NavMenuResponsive />
     </Box>
@@ -146,7 +137,6 @@ function DrawerAppBar(props) {
             </center>
           </div>
           <Box>
-
             {
               size(productList) > 0 ?
                 <Grid container spacing={6}>
@@ -180,24 +170,7 @@ function DrawerAppBar(props) {
                     </center>
                   </div>
                 </Box>
-
             }
-            {/* <Grid item xs={12} sm={6} md={4}>
-                <Item>
-                  <div>
-                    <CardWithAction
-                      img="/food.png"
-                      actionLink="page8"
-                      title="สำรับอาหารที่ 1"
-                      textButton="เลือก"
-                      isFavourite={true}
-                      handleFavouriteAction={() => {
-                        console.log("Fav!")
-                      }}
-                    />
-                  </div>
-                </Item>
-              </Grid> */}
           </Box>
         </Box>
       </div></>
