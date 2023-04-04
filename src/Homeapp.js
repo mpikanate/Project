@@ -26,7 +26,7 @@ import HeaderLogo from './components/HeaderLogo';
 import NavMenuResponsive from './components/NavMenuResponsive';
 import NavMenu from './components/NavMenu';
 import CardWithAction from './components/CardWithAction';
-import { retrieveProfile } from 'utils/auth';
+import { clearTempKidData, retrieveProfile } from 'utils/auth';
 
 const drawerWidth = 240;
 
@@ -61,7 +61,7 @@ function DrawerAppBar(props) {
 
   useEffect(() => {
     const profile = retrieveProfile()
-    console.log("profile: ", profile)
+    clearTempKidData()
   }, [])
 
   return (

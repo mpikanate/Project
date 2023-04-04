@@ -13,6 +13,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import background from "./bg.png";
+import { saveProfile } from 'utils/auth';
+import { get } from 'lodash';
 
 function Register(props) {
   return (
@@ -51,21 +53,36 @@ export default function Login() {
     // Call Api
     axios.post(`${API_URL}/api/user/create`, body)
       .then(function (response) {
-        console.log(response);
-        toast.success('Register success!', {
-          position: "bottom-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-        setTimeout(() => {
-          window.location.href = '/page1'
-        }, 3000)
-        
+        const { data, status } = response
+        if (status == 200) {
+          toast.success('Register success!', {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          saveProfile({
+            id: get(data, 'data.insertId', 0)
+          })
+          setTimeout(() => {
+            window.location.href = '/page1'
+          }, 3000)
+        }else {
+          toast.error('Register unsuccess!', {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
       })
       .catch(function (error) {
         console.log(error);

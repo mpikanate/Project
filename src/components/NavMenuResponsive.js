@@ -6,7 +6,7 @@ const NavMenuResponsive = () => {
     const navItems = [
         { name: 'หน้าหลัก', target: '/Homeapp' },
         { name: 'วิเคราะห์น้ำหนัก-ส่วนสูง', target: '/Weight_Height' },
-        { name: 'สำรับอาหาร', target: '/page3' },
+        // { name: 'สำรับอาหาร', target: '/page3' },
         { name: 'โปรไฟล์', target: '/profile' },
         { name: 'ออกจากระบบ', target: '/Login' }
     ];
