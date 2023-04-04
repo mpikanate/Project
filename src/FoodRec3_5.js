@@ -69,7 +69,6 @@ function DrawerAppBar(props) {
       .then(function (response) {
         const { data, status } = response
         if (status == 200) {
-          console.log("data: ", data);
           setProductList(get(data, "data", []))
         }
       })
