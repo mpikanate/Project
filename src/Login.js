@@ -140,7 +140,7 @@ export default function Login() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              สมัครสมาชิก
+              เข้าสู่ระบบ
             </Typography>
             <Box
               component="form"
@@ -181,7 +181,7 @@ export default function Login() {
                 เข้าสู่ระบบ
               </Button>
               {/* </Link> */}
-
+              <span>ยังไม่ได้เป็นสมาชิก? <a href="/Register">สมัครสมาชิก</a></span>
             </Box>
           </Box>
         </Grid>

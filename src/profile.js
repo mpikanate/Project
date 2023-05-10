@@ -1,4 +1,6 @@
 import * as React from 'react';
+
+import Link from '@mui/material/Link';
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -19,6 +21,12 @@ import Grid from '@mui/material/Grid';
 import HeaderLogo from './components/HeaderLogo';
 import NavMenuResponsive from './components/NavMenuResponsive';
 import NavMenu from './components/NavMenu';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { get, size } from 'lodash';
+import { retrieveProfile } from 'utils/auth';
+import { getThaiDateAgeFromNowString, getThaiDateString } from 'utils/helper';
+const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
 const drawerWidth = 240;
 const navItems = [
@@ -30,7 +38,11 @@ const navItems = [
 
 function DrawerAppBar(props) {
     const { window } = props;
-    const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const profile = retrieveProfile()
+    const [kidList, setKidList] = useState([])
+    const [selectedKid, setSelectedKid] = useState(null)
+    const [selectedKidHistory, setSelectedKidHistory] = useState(null)
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -43,7 +55,7 @@ function DrawerAppBar(props) {
             </Typography>
 
             <Divider />
-<NavMenuResponsive/>
+            <NavMenuResponsive />
         </Box>
     );
 
@@ -57,7 +69,44 @@ function DrawerAppBar(props) {
         color: theme.palette.text.secondary,
     }));
 
+    const fetchKidData = async (request) => {
+        // Call Api
+        axios.post(`${API_URL}/api/kids/find-by-user-id`, request)
+            .then(function (response) {
+                const { data, status } = response
+                if (status == 200) {
+                    setKidList(get(data, "data", []))
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
 
+    const fetchHistoryData = async (kidId) => {
+        // Call Api
+        axios.post(`${API_URL}/api/history/find-all`, {
+            kid_id: kidId
+        })
+            .then(function (response) {
+                const { data, status } = response
+                if (status == 200) {
+                    const dataList = get(data, "data", [])
+                    if (size(dataList) > 0) {
+                        setSelectedKidHistory(dataList[0])
+                    }
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    useEffect(() => {
+        fetchKidData({
+            user_id: profile["id"]
+        })
+    }, [])
 
     return (
         <><Box sx={{ display: 'flex' }}>
@@ -72,8 +121,8 @@ function DrawerAppBar(props) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <HeaderLogo/>
-<NavMenu/>
+                    <HeaderLogo />
+                    <NavMenu />
                 </Toolbar>
             </AppBar>
             <Box component="nav">
@@ -102,18 +151,39 @@ function DrawerAppBar(props) {
                     <div>
 
                         <center>
-                            <Button style={{ flex: 1, flexDirection: 'column' }}>
-                                <img src="./baby-icon.png" width={250} height={250} />
-                                <h2>เด็กชาย ไทก้า</h2>
-                                <h3>อายุ 3 ปี 7 เดือน 10 วัน</h3>
-                            </Button>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;&nbsp;
 
-                            <Button style={{ flex: 1, flexDirection: 'column' }}>
-                                <img src="./plus-sign.png" width={220} height={220} />
-                                <h4> เพิ่ม </h4>
-                            </Button>
+                            {
+                                size(kidList) > 0 ?
+                                    <>{kidList.map((kid) => {
+                                        const DOB = kid["DOB"]
+                                        const Gender = kid["Gender"]
+                                        const Height = kid["Height"]
+                                        const KidID = kid["KidID"]
+                                        const Name = kid["Name"]
+                                        const SurName = kid["SurName"]
+                                        const UserId = kid["UserId"]
+                                        const Weight = kid["Weight"]
+                                        return <>
+                                            <Button style={{ flex: 1, flexDirection: 'column', backgroundColor: selectedKid && selectedKid["KidID"] == KidID ? "#FED470" : "transparent" }} onClick={() => {
+                                                setSelectedKid(kid)
+                                                fetchHistoryData(KidID)
+                                            }}>
+                                                <img src="./baby-icon.png" width={250} height={250} />
+                                                <h2>{Gender == "M" ? `เด็กชาย` : `เด็กหญิง`} {`${Name} ${SurName}`}</h2>
+                                                <h3>{getThaiDateAgeFromNowString(DOB)}</h3>
+                                            </Button>
+                                        </>
+                                    })}</>
+                                    :
+                                    <></>
+                            }
+
+                            <Link href="Page1">
+                                <Button style={{ flex: 1, flexDirection: 'column' }}>
+                                    <img src="./plus-sign.png" width={220} height={220} alt="" />
+                                    <h4> เพิ่ม </h4>
+                                </Button>
+                            </Link>
                         </center>
 
                     </div>
@@ -121,52 +191,56 @@ function DrawerAppBar(props) {
                 </Box>
             </div>
 
-            <div>
-                <Grid container justifyContent="space-between">
-                    <Grid item>
-                        <h2>
-                            การเจริญเติบโต
-                            <Button>
-                                <img src="/add.png" width={50} height={50} />
-                            </Button>
-                        </h2>
-                        <h3>
-                            ข้อมูลล่าสุดเมื่อ 22 มกราคม 2566
-                        </h3>
-                    </Grid>
-                    <Grid item>
-                        <Button>
-                            <img src="/History.png" width={60} height={50} />
-                        </Button>
-                    </Grid>
-                </Grid>
-            </div>
-            <div>
-                <Box component="main" sx={{ p: 2 }}>
+            {selectedKid && selectedKid["KidID"] &&
+                <div style={{ margin: "5px 20px" }}>
+                    <div>
+                        <Grid container justifyContent="space-between">
+                            <Grid item>
+                                <h2>
+                                    การเจริญเติบโตของ {selectedKid["Gender"] === "M" ? `เด็กชาย` : `เด็กหญิง`} {`${selectedKid["Name"]} ${selectedKid["SurName"]}`}
+                                    <Link href="Weight_Height">
+                                        <Button>
+                                            <img src="/add.png" width={50} height={50} alt="" />
+                                        </Button>
+                                    </Link>
+                                </h2>
+                                <h3>
+                                    ข้อมูลล่าสุดเมื่อ {selectedKidHistory && selectedKidHistory["DMY"] ? getThaiDateString(selectedKidHistory["DMY"]) : ""}
+                                </h3>
+                            </Grid>
+                            <Grid item>
+                                <Button>
+                                    <img src="/History.png" alt="" width={60} height={50} />
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </div>
+                    <div>
+                        <Box component="main" sx={{ p: 2 }}>
+                            <h2>
+                                <img src="/height (1).png" alt="" width={60} height={60} />
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                {selectedKidHistory && selectedKidHistory["Height"] ? selectedKidHistory["Height"] : "0"} เซนติเมตร
 
-                    <h2>
-                        <img src="/height (1).png" width={60} height={60} />
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        55 เซนติเมตร
+                            </h2>
+                            <img src="/progress1.png" alt="" style={{
+                                width: "100%",
+                                maxWidth: 500
+                            }} />
 
-                    </h2>
-                    <img src="/progress1.png" width={500} height={60} />
-
-                    <h2>
-                        <img src="/weight (1).png" width={60} height={60} />
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        15.2 กิโลกรัม
-                    </h2>
-                    <img src="/progress2.png" width={500} height={60} />
-
-                    <h2>
-                        <img src="/IconWeight.png" width={60} height={70} />
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        ภาวะ อ้วน ผอม
-                    </h2>
-                    <img src="/progress3.png" width={500} height={60} />
-                </Box>
-            </div>
+                            <h2>
+                                <img src="/weight (1).png" alt="" width={60} height={60} />
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                {selectedKidHistory && selectedKidHistory["Weight"] ? selectedKidHistory["Weight"] : "0"} กิโลกรัม
+                            </h2>
+                            <img src="/progress2.png" alt="" style={{
+                                width: "100%",
+                                maxWidth: 500
+                            }} />
+                        </Box>
+                    </div>
+                </div>
+            }
         </>
 
     );

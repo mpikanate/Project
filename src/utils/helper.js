@@ -119,10 +119,10 @@ const getThaiDateAgeFromNowString = (date) => {
     if ((age.years > 0) && (age.months > 0) && (age.days > 0))
         ageString = "อายุ " + age.years + " ปี " + age.months + " เดือน " + age.days + " วัน";
     else if ((age.years == 0) && (age.months == 0) && (age.days > 0))
-        ageString = "" + age.days + " วัน";
+        ageString = "อายุ " + age.days + " วัน";
     //when current month date is same as birth date month
     else if ((age.years > 0) && (age.months == 0) && (age.days == 0))
-        ageString = "อายุ " + age.years + " ปี Happy Birthday!!";
+        ageString = "อายุ " + age.years + " ปี";
     else if ((age.years > 0) && (age.months > 0) && (age.days == 0))
         ageString = "อายุ " + age.years + " ปี " + age.months + " เดือน";
     else if ((age.years == 0) && (age.months > 0) && (age.days > 0))
@@ -132,7 +132,7 @@ const getThaiDateAgeFromNowString = (date) => {
     else if ((age.years == 0) && (age.months > 0) && (age.days == 0))
         ageString = "อายุ " + age.months + " เดือน";
     //when current date is same as dob(date of birth)
-    else ageString = "Welcome to Earth! <br> It's first day on Earth!";
+    else ageString = "อายุ 1 วัน";
 
 
     return ageString
