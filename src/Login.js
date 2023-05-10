@@ -45,56 +45,68 @@ export default function Login() {
     event.preventDefault();
     const email = emailRef.current?.value
     const password = passwordRef.current?.value
-    const body = {
-      email: email,
-      password: password
-    }
 
-    // Call Api
-    axios.post(`${API_URL}/api/user/login`, body)
-      .then(function (response) {
-        const { data, status } = response
-        if (status == 200) {
-          toast.success('Success!', {
-            position: "bottom-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-          saveProfile(get(data, 'data', {}))
-          window.location.href = '/homeapp'
-        } else {
-          toast.error('Email or Password was incorrect!', {
-            position: "bottom-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-        toast.error('Email or Password was incorrect!', {
-          position: "bottom-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+    if (!email || !password) {
+      toast.warn('กรุณากรอกข้อมูลให้ครบถ้วน!', {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
       });
-
-
+    } else {
+      const body = {
+        email: email,
+        password: password
+      }
+  
+      // Call Api
+      axios.post(`${API_URL}/api/user/login`, body)
+        .then(function (response) {
+          const { data, status } = response
+          if (status == 200) {
+            toast.success('เข้าสู่ระบบสำเร็จ!', {
+              position: "bottom-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+            saveProfile(get(data, 'data', {}))
+            window.location.href = '/homeapp'
+          } else {
+            toast.error('อีเมลหรือรหัสผ่านไม่ถูกต้อง! กรุณาลองใหม่อีกครั้ง', {
+              position: "bottom-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+          toast.error('อีเมลหรือรหัสผ่านไม่ถูกต้อง! กรุณาลองใหม่อีกครั้ง', {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        });
+    }
 
   };
 
