@@ -80,6 +80,20 @@ function DrawerAppBar(props) {
       });
   }
 
+  const fetchFoodDataRandom = async (request) => {
+    // Call Api
+    axios.post(`${API_URL}/api/food/find-by-age-group-random`, request)
+      .then(function (response) {
+        const { data, status } = response
+        if (status == 200) {
+          setProductList(get(data, "data", []))
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   useEffect(() => {
     fetchFoodData({
       age_group: 3
@@ -129,7 +143,7 @@ function DrawerAppBar(props) {
               <h1>
                 สำรับแนะนำจากระบบ
                 <Button onClick={async () => {
-                  await fetchFoodData({
+                  await fetchFoodDataRandom({
                     age_group: 3
                   })
                 }}>

@@ -7,7 +7,7 @@ export const saveProfile = (
     option
 ) => {
     let cookieOption = {
-        maxAge: option?.maxAge || 86400,
+        // maxAge: option?.maxAge || 86400,
         path: "/",
     };
     setCookie(null, COOKIE_NAME, JSON.stringify(profile), cookieOption);
