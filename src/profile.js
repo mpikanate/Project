@@ -24,17 +24,11 @@ import NavMenu from './components/NavMenu';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { get, size } from 'lodash';
-import { retrieveProfile } from 'utils/auth';
+import { retrieveProfile, retrieveSelectedTempKidData, saveSelectedTempKidData } from 'utils/auth';
 import { getThaiDateAgeFromNowString, getThaiDateString } from 'utils/helper';
 const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
 const drawerWidth = 240;
-const navItems = [
-    { name: 'หน้าหลัก', target: '/Homeapp' },
-    { name: 'วิเคราะห์น้ำหนัก-ส่วนสูง', target: '/page2' },
-    { name: 'สำรับอาหาร', target: '/page3' },
-    { name: 'โปรไฟล์', target: '/page4' }
-];
 
 function DrawerAppBar(props) {
     const { window } = props;
@@ -43,10 +37,19 @@ function DrawerAppBar(props) {
     const [kidList, setKidList] = useState([])
     const [selectedKid, setSelectedKid] = useState(null)
     const [selectedKidHistory, setSelectedKidHistory] = useState(null)
+    const selectedKidData = retrieveSelectedTempKidData()
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
+
+    useEffect(() => {
+        console.log("selectedKidData:", selectedKidData)
+        if(selectedKidData && selectedKidData["KidID"]) {
+            setSelectedKid(selectedKidData)
+            fetchHistoryData(selectedKidData["KidID"])
+        }
+    }, [])
 
     const drawer = (
         <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
@@ -157,18 +160,19 @@ function DrawerAppBar(props) {
                                     <>{kidList.map((kid) => {
                                         const DOB = kid["DOB"]
                                         const Gender = kid["Gender"]
-                                        const Height = kid["Height"]
+                                        // const Height = kid["Height"]
                                         const KidID = kid["KidID"]
                                         const Name = kid["Name"]
                                         const SurName = kid["SurName"]
-                                        const UserId = kid["UserId"]
-                                        const Weight = kid["Weight"]
+                                        // const UserId = kid["UserId"]
+                                        // const Weight = kid["Weight"]
                                         return <>
                                             <Button style={{ flex: 1, flexDirection: 'column', backgroundColor: selectedKid && selectedKid["KidID"] == KidID ? "#FED470" : "transparent" }} onClick={() => {
                                                 setSelectedKid(kid)
                                                 fetchHistoryData(KidID)
+                                                saveSelectedTempKidData(kid)
                                             }}>
-                                                <img src="./baby-icon.png" width={250} height={250} />
+                                                <img src="./baby-icon.png" alt="" width={250} height={250} />
                                                 <h2>{Gender == "M" ? `เด็กชาย` : `เด็กหญิง`} {`${Name} ${SurName}`}</h2>
                                                 <h3>{getThaiDateAgeFromNowString(DOB)}</h3>
                                             </Button>

@@ -1,6 +1,7 @@
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 export const COOKIE_NAME = "user-profile";
 export const COOKIE_TEMP_KID_DATA = "temp-kid-data";
+export const COOKIE_SELECTED_TEMP_KID_DATA = "temp-selected-kid-data";
 
 export const saveProfile = (
     profile,
@@ -42,4 +43,20 @@ export const retrieveTempKidData = () => {
 export const clearTempKidData = () => {
     destroyCookie(null, COOKIE_TEMP_KID_DATA);
     localStorage.clear();
+};
+
+export const saveSelectedTempKidData = (
+    data,
+    option
+) => {
+    let cookieOption = {
+        // maxAge: option?.maxAge || 86400,
+        path: "/",
+    };
+    setCookie(null, COOKIE_SELECTED_TEMP_KID_DATA, JSON.stringify(data), cookieOption);
+};
+
+export const retrieveSelectedTempKidData = () => {
+    const cookies = parseCookies();
+    return cookies[COOKIE_SELECTED_TEMP_KID_DATA] ? JSON.parse(cookies[COOKIE_SELECTED_TEMP_KID_DATA]) : {};
 };
