@@ -25,7 +25,7 @@ export default function Weight_Height() {
 
     const handleSaveHistory = async () => {
         const data = {
-            DMY: moment(value).format("DD/MM/YYYY"),
+            DMY: moment(value.$d).format("DD/MM/YYYY"),
             height: height || 0,
             weight: weight || 0,
             KidID: selectedKid && selectedKid["KidID"] ? selectedKid["KidID"] : 0

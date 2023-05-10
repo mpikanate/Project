@@ -1,114 +1,190 @@
-import React, { Component } from 'react';
-import CanvasJSReact from './canvasjs.react';
-var CanvasJS = CanvasJSReact.CanvasJS;
-var CanvasJSChart = CanvasJSReact.CanvasJSChart;
- 
-class History extends Component {	
-	constructor() {
-		super();
-		this.toggleDataSeries = this.toggleDataSeries.bind(this);
-	}
-	
-	toggleDataSeries(e){
-		if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-			e.dataSeries.visible = false;
+import * as React from 'react';
+
+import Link from '@mui/material/Link';
+import PropTypes from 'prop-types';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import MenuIcon from '@mui/icons-material/Menu';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import { experimentalStyled as styled } from '@mui/material/styles';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+import HeaderLogo from './components/HeaderLogo';
+import NavMenuResponsive from './components/NavMenuResponsive';
+import NavMenu from './components/NavMenu';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { get, size } from 'lodash';
+import { retrieveProfile, retrieveSelectedTempKidData, saveSelectedTempKidData } from 'utils/auth';
+import { getThaiDateAgeFromNowString, getThaiDateString, getThaiDateAgeFromInputString } from 'utils/helper';
+const API_URL = process.env.REACT_APP_API_ENDPOINT;
+
+const drawerWidth = 240;
+
+function DrawerAppBar(props) {
+	const { window } = props;
+	const [mobileOpen, setMobileOpen] = useState(false);
+	const selectedKidData = retrieveSelectedTempKidData()
+	const [selectedKidHistory, setSelectedKidHistory] = useState([])
+
+	const handleDrawerToggle = () => {
+		setMobileOpen(!mobileOpen);
+	};
+
+	useEffect(() => {
+		console.log("selectedKidData:", selectedKidData)
+		if (!selectedKidData) {
+			window.location.href = '/profile'
+		} else {
+			fetchHistoryData(selectedKidData["KidID"])
 		}
-		else{
-			e.dataSeries.visible = true;
-		}
-		this.chart.render();
+	}, [])
+
+	const drawer = (
+		<Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
+			<Typography variant="h6" sx={{ my: 2 }}>
+				Food For Child
+			</Typography>
+
+			<Divider />
+			<NavMenuResponsive />
+		</Box>
+	);
+
+	const container = window !== undefined ? () => window().document.body : undefined;
+
+	const Item = styled(Paper)(({ theme }) => ({
+		backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+		...theme.typography.body2,
+		padding: theme.spacing(1),
+		textAlign: 'center',
+		color: theme.palette.text.secondary,
+	}));
+
+
+	const fetchHistoryData = async (kidId) => {
+		// Call Api
+		axios.post(`${API_URL}/api/history/find-all`, {
+			kid_id: kidId
+		})
+			.then(function (response) {
+				const { data, status } = response
+				if (status == 200) {
+					const dataList = get(data, "data", [])
+					if (size(dataList) > 0) {
+						setSelectedKidHistory(dataList)
+					}
+				}
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
 	}
-	
-	render() {
-		const options = {
-			theme: "light2",
-			animationEnabled: true,
-			title:{
-				text: "Units Sold VS Profit"
-			},
-			subtitles: [{
-				text: "Click Legend to Hide or Unhide Data Series"
-			}],
-			axisX: {
-				title: "States"
-			},
-			axisY: {
-				title: "Units Sold",
-				titleFontColor: "#6D78AD",
-				lineColor: "#6D78AD",
-				labelFontColor: "#6D78AD",
-				tickColor: "#6D78AD"
-			},
-			axisY2: {
-				title: "Profit in USD",
-				titleFontColor: "#51CDA0",
-				lineColor: "#51CDA0",
-				labelFontColor: "#51CDA0",
-				tickColor: "#51CDA0"
-			},
-			toolTip: {
-				shared: true
-			},
-			legend: {
-				cursor: "pointer",
-				itemclick: this.toggleDataSeries
-			},
-			data: [{
-				type: "spline",
-				name: "Units Sold",
-				showInLegend: true,
-				xValueFormatString: "MMM YYYY",
-				yValueFormatString: "#,##0 Units",
-				dataPoints: [
-					{ x: new Date(2017, 0, 1), y: 120 },
-					{ x: new Date(2017, 1, 1), y: 135 },
-					{ x: new Date(2017, 2, 1), y: 144 },
-					{ x: new Date(2017, 3, 1), y: 103 },
-					{ x: new Date(2017, 4, 1), y: 93 },
-					{ x: new Date(2017, 5, 1), y: 129 },
-					{ x: new Date(2017, 6, 1), y: 143 },
-					{ x: new Date(2017, 7, 1), y: 156 },
-					{ x: new Date(2017, 8, 1), y: 122 },
-					{ x: new Date(2017, 9, 1), y: 106 },
-					{ x: new Date(2017, 10, 1), y: 137 },
-					{ x: new Date(2017, 11, 1), y: 142 }
-				]
-			},
-			{
-				type: "spline",
-				name: "Profit",
-				axisYType: "secondary",
-				showInLegend: true,
-				xValueFormatString: "MMM YYYY",
-				yValueFormatString: "$#,##0.#",
-				dataPoints: [
-					{ x: new Date(2017, 0, 1), y: 19034.5 },
-					{ x: new Date(2017, 1, 1), y: 20015 },
-					{ x: new Date(2017, 2, 1), y: 27342 },
-					{ x: new Date(2017, 3, 1), y: 20088 },
-					{ x: new Date(2017, 4, 1), y: 20234 },
-					{ x: new Date(2017, 5, 1), y: 29034 },
-					{ x: new Date(2017, 6, 1), y: 30487 },
-					{ x: new Date(2017, 7, 1), y: 32523 },
-					{ x: new Date(2017, 8, 1), y: 20234 },
-					{ x: new Date(2017, 9, 1), y: 27234 },
-					{ x: new Date(2017, 10, 1), y: 33548 },
-					{ x: new Date(2017, 11, 1), y: 32534 }
-				]
-			}]
-		}
-		
-		
-		return (
-		<div>
-			<CanvasJSChart options = {options} 
-				 onRef={ref => this.chart = ref}
-			/>
-			{/*You can get reference to the chart instance as shown above using onRef. This allows you to access all chart properties and methods*/}
-		</div>
-		);
-	}
-			
+
+	return (
+		<><Box sx={{ display: 'flex' }}>
+			<AppBar component="nav">
+				<Toolbar>
+					<IconButton
+						color="inherit"
+						aria-label="open drawer"
+						edge="start"
+						onClick={handleDrawerToggle}
+						sx={{ mr: 2, display: { sm: 'none' } }}
+					>
+						<MenuIcon />
+					</IconButton>
+					<HeaderLogo />
+					<NavMenu />
+				</Toolbar>
+			</AppBar>
+			<Box component="nav">
+				<Drawer
+					container={container}
+					variant="temporary"
+					open={mobileOpen}
+					onClose={handleDrawerToggle}
+					ModalProps={{
+						keepMounted: true, // Better open performance on mobile.
+					}}
+					sx={{
+						display: { xs: 'block', sm: 'none' },
+						'& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+					}}
+				>
+					{drawer}
+				</Drawer>
+			</Box>
+
+
+		</Box>
+			<div>
+				<Box component="main" sx={{}}>
+					<Toolbar />
+					<div>
+						<center>
+							<Button style={{ flex: 1, flexDirection: 'column' }} >
+								<img src="./baby-icon.png" alt="" width={250} height={250} />
+								<h2>{selectedKidData["Gender"] == "M" ? `เด็กชาย` : `เด็กหญิง`} {`${selectedKidData["Name"]} ${selectedKidData["SurName"]}`}</h2>
+								<h3>{getThaiDateAgeFromNowString(selectedKidData["DOB"])}</h3>
+							</Button>
+						</center>
+					</div>
+					{
+						size(selectedKidHistory) > 0 ?
+							<>
+								{selectedKidHistory.map((history) => {
+									return <Grid container>
+										<Grid item xs={0} sm={2} md={3}></Grid>
+										<Grid item xs={12} sm={8} md={6}>
+											<div style={{ backgroundColor: "#fff" }}>
+												<div style={{ backgroundColor: "#ddd", height: 20 }}></div>
+												<Grid container style={{ padding: 20 }}>
+													<Grid item xs={6}>
+														<div style={{ textAlign: "left", height: 50, display: "flex", alignItems: "center" }}><img src="/height (1).png" alt="" width={40} style={{ marginRight: 10 }} /> <span style={{ fontSize: 20 }}>{history && history["Height"] ? history["Height"] : "0"} เซนติเมตร</span></div>
+														<div style={{ textAlign: "left", height: 50, display: "flex", alignItems: "center" }}><img src="/weight (1).png" alt="" width={40} style={{ marginRight: 10 }} /> <span style={{ fontSize: 20 }}>{history && history["Weight"] ? history["Weight"] : "0"} กิโลกรัม</span></div>
+													</Grid>
+													<Grid item xs={6}>
+														<div style={{ textAlign: "right", height: 50, display: "grid", alignItems: "center"  }}>{history && history["DMY"] ? getThaiDateString(history["DMY"]) : ""}</div>
+														<div style={{ textAlign: "right", height: 50, display: "grid", alignItems: "center"  }}>{history && history["DMY"] && selectedKidData && selectedKidData["DOB"] ? getThaiDateAgeFromInputString(selectedKidData["DOB"],history["DMY"]) : ""}</div>
+													</Grid>
+												</Grid>
+											</div>
+										</Grid>
+										<Grid item xs={0} sm={2} md={3}></Grid>
+									</Grid>
+								})}
+							</>
+							:
+							<></>
+					}
+
+				</Box>
+			</div>
+
+		</>
+
+	);
+
 }
- 
-module.exports = History; 
+
+
+
+DrawerAppBar.propTypes = {
+	/**
+	 * Injected by the documentation to work in an iframe.
+	 * You won't need it on your project.
+	 */
+	window: PropTypes.func,
+};
+
+export default DrawerAppBar;

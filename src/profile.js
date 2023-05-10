@@ -45,7 +45,7 @@ function DrawerAppBar(props) {
 
     useEffect(() => {
         console.log("selectedKidData:", selectedKidData)
-        if(selectedKidData && selectedKidData["KidID"]) {
+        if (selectedKidData && selectedKidData["KidID"]) {
             setSelectedKid(selectedKidData)
             fetchHistoryData(selectedKidData["KidID"])
         }
@@ -213,9 +213,11 @@ function DrawerAppBar(props) {
                                 </h3>
                             </Grid>
                             <Grid item>
-                                <Button>
-                                    <img src="/History.png" alt="" width={60} height={50} />
-                                </Button>
+                                <Link href="History">
+                                    <Button>
+                                        <img src="/History.png" alt="" width={60} height={50} />
+                                    </Button>
+                                </Link>
                             </Grid>
                         </Grid>
                     </div>

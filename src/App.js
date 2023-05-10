@@ -25,6 +25,7 @@ import Ingredient_details from './Ingredient_details';
 import CookingMethods_details from './CookingMethods_details';
 import Weight_Height from './Weight_Height';
 import Food from './Food';
+import History from './History';
 import React from 'react';
 
 function App() {
@@ -61,6 +62,7 @@ function App() {
             <Route path="/CookingMethods_details" component={CookingMethods_details} />
             <Route path="/Weight_Height" component={Weight_Height} />
             <Route path="/food/:foodId" component={Food} />
+            <Route path="/History" component={History} />
           </Switch>
         </Router>
       </div>
