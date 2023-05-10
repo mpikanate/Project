@@ -25,7 +25,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { get, size } from 'lodash';
 import { retrieveProfile, retrieveSelectedTempKidData, saveSelectedTempKidData } from 'utils/auth';
-import { getThaiDateAgeFromNowString, getThaiDateString } from 'utils/helper';
+import { getThaiDateAgeFromInput, getThaiDateAgeFromNowString, getThaiDateString } from 'utils/helper';
 const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
 const drawerWidth = 240;
@@ -38,13 +38,13 @@ function DrawerAppBar(props) {
     const [selectedKid, setSelectedKid] = useState(null)
     const [selectedKidHistory, setSelectedKidHistory] = useState(null)
     const selectedKidData = retrieveSelectedTempKidData()
+    const [ageLastest, setAgeLastest] = useState(null)
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
 
     useEffect(() => {
-        console.log("selectedKidData:", selectedKidData)
         if (selectedKidData && selectedKidData["KidID"]) {
             setSelectedKid(selectedKidData)
             fetchHistoryData(selectedKidData["KidID"])
@@ -96,13 +96,28 @@ function DrawerAppBar(props) {
                 if (status == 200) {
                     const dataList = get(data, "data", [])
                     if (size(dataList) > 0) {
-                        setSelectedKidHistory(dataList[0])
+                        const lastestHistory = dataList[0]
+                        setSelectedKidHistory(lastestHistory)
+                        fetchAgeData(lastestHistory)
                     }
                 }
             })
             .catch(function (error) {
                 console.log(error);
             });
+    }
+
+    const fetchAgeData = async (lastestHistory) => {
+        const age = getThaiDateAgeFromInput(get(selectedKidData, "DOB", ""), get(lastestHistory, "DMY", ""))
+        setAgeLastest(age)
+        const data = {
+            year: get(age, "years", 0),
+            month: get(age, "months", 0),
+            gender: get(selectedKidData, "Gender", ""),
+            height: get(selectedKidHistory, "Height", 0)
+        }
+
+        console.log(data)
     }
 
     useEffect(() => {
@@ -158,14 +173,14 @@ function DrawerAppBar(props) {
                             {
                                 size(kidList) > 0 ?
                                     <>{kidList.map((kid) => {
-                                        const DOB = kid["DOB"]
-                                        const Gender = kid["Gender"]
-                                        // const Height = kid["Height"]
-                                        const KidID = kid["KidID"]
-                                        const Name = kid["Name"]
-                                        const SurName = kid["SurName"]
-                                        // const UserId = kid["UserId"]
-                                        // const Weight = kid["Weight"]
+                                        const DOB = get(kid, "DOB", "")
+                                        const Gender = get(kid, "Gender", "")
+                                        // const Height = get(kid, "Height", "")
+                                        const KidID = get(kid, "KidID", "")
+                                        const Name = get(kid, "Name", "")
+                                        const SurName = get(kid, "SurName", "")
+                                        // const UserId = get(kid, "UserId", "")
+                                        // const Weight = get(kid, "Weight", "")
                                         return <>
                                             <Button style={{ flex: 1, flexDirection: 'column', backgroundColor: selectedKid && selectedKid["KidID"] == KidID ? "#FED470" : "transparent" }} onClick={() => {
                                                 setSelectedKid(kid)
@@ -229,20 +244,26 @@ function DrawerAppBar(props) {
                                 {selectedKidHistory && selectedKidHistory["Height"] ? selectedKidHistory["Height"] : "0"} เซนติเมตร
 
                             </h2>
-                            <img src="/progress1.png" alt="" style={{
-                                width: "100%",
-                                maxWidth: 500
-                            }} />
+                            {(get(ageLastest, "years", 0) >= 3 && get(ageLastest, "years", 0) < 13) &&
+                                <img src="/progress1.png" alt="" style={{
+                                    width: "100%",
+                                    maxWidth: 500
+                                }} />
+                            }
+
 
                             <h2>
                                 <img src="/weight (1).png" alt="" width={60} height={60} />
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 {selectedKidHistory && selectedKidHistory["Weight"] ? selectedKidHistory["Weight"] : "0"} กิโลกรัม
                             </h2>
-                            <img src="/progress2.png" alt="" style={{
-                                width: "100%",
-                                maxWidth: 500
-                            }} />
+
+                            {(get(ageLastest, "years", 0) >= 3 && get(ageLastest, "years", 0) < 13) &&
+                                <img src="/progress2.png" alt="" style={{
+                                    width: "100%",
+                                    maxWidth: 500
+                                }} />
+                            }
                         </Box>
                     </div>
                 </div>

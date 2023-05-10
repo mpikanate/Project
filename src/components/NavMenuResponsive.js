@@ -11,7 +11,6 @@ const NavMenuResponsive = () => {
         { name: 'โปรไฟล์', target: '/profile' },
         { name: 'ออกจากระบบ', target: '/Login' }
     ];
-console.log("selectedKid: ", selectedKid)
     if (selectedKid && selectedKid["KidID"]) {
         navItems = [
             { name: 'หน้าหลัก', target: '/Homeapp' },
