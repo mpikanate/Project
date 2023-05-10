@@ -16,6 +16,8 @@ export const saveProfile = (
 
 export const clearToken = () => {
     destroyCookie(null, COOKIE_NAME);
+    clearTempKidData()
+    clearSelectedTempKidData()
     localStorage.clear();
 };
 
@@ -59,4 +61,9 @@ export const saveSelectedTempKidData = (
 export const retrieveSelectedTempKidData = () => {
     const cookies = parseCookies();
     return cookies[COOKIE_SELECTED_TEMP_KID_DATA] ? JSON.parse(cookies[COOKIE_SELECTED_TEMP_KID_DATA]) : {};
+};
+
+export const clearSelectedTempKidData = () => {
+    destroyCookie(null, COOKIE_SELECTED_TEMP_KID_DATA);
+    localStorage.clear();
 };
