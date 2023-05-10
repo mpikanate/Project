@@ -35,10 +35,12 @@ function DrawerAppBar(props) {
     const [mobileOpen, setMobileOpen] = useState(false);
     const profile = retrieveProfile()
     const [kidList, setKidList] = useState([])
-    const [selectedKid, setSelectedKid] = useState(null)
-    const [selectedKidHistory, setSelectedKidHistory] = useState(null)
     const selectedKidData = retrieveSelectedTempKidData()
+    const [selectedKid, setSelectedKid] = useState(selectedKidData)
+    const [selectedKidHistory, setSelectedKidHistory] = useState(null)
     const [ageLastest, setAgeLastest] = useState(null)
+    const [heightType, setHeightType] = useState("normal")
+    const [weightType, setWeightType] = useState("normal")
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -47,7 +49,7 @@ function DrawerAppBar(props) {
     useEffect(() => {
         if (selectedKidData && selectedKidData["KidID"]) {
             setSelectedKid(selectedKidData)
-            fetchHistoryData(selectedKidData["KidID"])
+            fetchHistoryData(selectedKidData["KidID"], selectedKid)
         }
     }, [])
 
@@ -86,7 +88,7 @@ function DrawerAppBar(props) {
             });
     }
 
-    const fetchHistoryData = async (kidId) => {
+    const fetchHistoryData = async (kidId, kid) => {
         // Call Api
         axios.post(`${API_URL}/api/history/find-all`, {
             kid_id: kidId
@@ -98,7 +100,7 @@ function DrawerAppBar(props) {
                     if (size(dataList) > 0) {
                         const lastestHistory = dataList[0]
                         setSelectedKidHistory(lastestHistory)
-                        fetchAgeData(lastestHistory)
+                        fetchAgeData(lastestHistory, kid)
                     }
                 }
             })
@@ -107,17 +109,53 @@ function DrawerAppBar(props) {
             });
     }
 
-    const fetchAgeData = async (lastestHistory) => {
-        const age = getThaiDateAgeFromInput(get(selectedKidData, "DOB", ""), get(lastestHistory, "DMY", ""))
+    const fetchAgeData = async (lastestHistory, kid) => {
+        const age = getThaiDateAgeFromInput(get(kid, "DOB", ""), get(lastestHistory, "DMY", ""))
         setAgeLastest(age)
-        const data = {
-            year: get(age, "years", 0),
-            month: get(age, "months", 0),
-            gender: get(selectedKidData, "Gender", ""),
-            height: get(selectedKidHistory, "Height", 0)
+        const heightData = {
+            years: get(age, "years", 0),
+            months: get(age, "months", 0),
+            gender: get(kid, "Gender", "M") == "M" ? "boy" : "girl",
+            height: get(lastestHistory, "Height", 0)
         }
+        calculateHeight(heightData)
+        const weightData = {
+            years: get(age, "years", 0),
+            months: get(age, "months", 0),
+            gender: get(kid, "Gender", "M") == "M" ? "boy" : "girl",
+            weight: get(lastestHistory, "Weight", 0)
+        }
+        calculateWeight(weightData)
+    }
 
-        console.log(data)
+    const calculateHeight = (heightData) => {
+        // Call Api
+        axios.post(`${API_URL}/api/calculate/calculate-height`, heightData)
+            .then(function (response) {
+                const { data, status } = response
+                if (status == 200) {
+                    const dataList = get(data, "data", [])
+                    if (size(dataList) > 0) {
+                        const calculateData = dataList[0]
+                        setHeightType(get(calculateData, "calculate_height", "normal"))
+                    }
+                }
+            })
+    }
+
+    const calculateWeight = (weightData) => {
+        // Call Api
+        axios.post(`${API_URL}/api/calculate/calculate-weight`, weightData)
+            .then(function (response) {
+                const { data, status } = response
+                if (status == 200) {
+                    const dataList = get(data, "data", [])
+                    if (size(dataList) > 0) {
+                        const calculateData = dataList[0]
+                        setWeightType(get(calculateData, "calculate_weight", "normal"))
+                    }
+                }
+            })
     }
 
     useEffect(() => {
@@ -184,7 +222,7 @@ function DrawerAppBar(props) {
                                         return <>
                                             <Button style={{ flex: 1, flexDirection: 'column', backgroundColor: selectedKid && selectedKid["KidID"] == KidID ? "#FED470" : "transparent" }} onClick={() => {
                                                 setSelectedKid(kid)
-                                                fetchHistoryData(KidID)
+                                                fetchHistoryData(KidID, kid)
                                                 saveSelectedTempKidData(kid)
                                             }}>
                                                 <img src="./baby-icon.png" alt="" width={250} height={250} />
@@ -228,6 +266,19 @@ function DrawerAppBar(props) {
                                 </h3>
                             </Grid>
                             <Grid item>
+                                {weightType !== "normal" && <>
+                                    {weightType === "fat" || weightType === "quite_fat" ? <Link href="">
+                                        <Button>
+                                            <img src="/Overweight.png" alt="" height={100}/>
+                                        </Button>
+                                    </Link> :
+                                        <Link href="">
+                                            <Button>
+                                                <img src="/Underweight.png" alt="" height={100} />
+                                            </Button>
+                                        </Link>}
+                                </>
+                                }
                                 <Link href="History">
                                     <Button>
                                         <img src="/History.png" alt="" width={60} height={50} />
@@ -245,7 +296,7 @@ function DrawerAppBar(props) {
 
                             </h2>
                             {(get(ageLastest, "years", 0) >= 3 && get(ageLastest, "years", 0) < 13) &&
-                                <img src="/progress1.png" alt="" style={{
+                                <img src={`/height_${heightType}.png`} alt="" style={{
                                     width: "100%",
                                     maxWidth: 500
                                 }} />
@@ -259,7 +310,7 @@ function DrawerAppBar(props) {
                             </h2>
 
                             {(get(ageLastest, "years", 0) >= 3 && get(ageLastest, "years", 0) < 13) &&
-                                <img src="/progress2.png" alt="" style={{
+                                <img src={`/weight_${weightType}.png`} alt="" style={{
                                     width: "100%",
                                     maxWidth: 500
                                 }} />
