@@ -74,7 +74,7 @@ function DrawerAppBar(props) {
         color: theme.palette.text.secondary,
     }));
 
-    const [productList, setProductList] = useState([])
+    const [foodList, setFoodList] = useState([])
 
     const fetchFavouriteFoodByUser = async (request) => {
         // Call Api
@@ -84,9 +84,9 @@ function DrawerAppBar(props) {
                 if (status == 200) {
                     const dataList = get(data, "data", [])
                     if (size(dataList) > 0) {
-                        setProductList(dataList)
+                        setFoodList(dataList)
                     } else {
-                        setProductList([])
+                        setFoodList([])
                     }
                 }
             })
@@ -145,9 +145,9 @@ function DrawerAppBar(props) {
                 </center>
                 <Box>
                     {
-                        size(productList) > 0 ?
+                        size(foodList) > 0 ?
                             <Grid container spacing={6}>
-                                {productList.map((item) => {
+                                {foodList.map((item) => {
                                     const foodId = item["FoodID"]
                                     const userId = profile["id"]
                                     console.log("profile: ", profile)

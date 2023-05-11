@@ -2,6 +2,7 @@ import { destroyCookie, parseCookies, setCookie } from "nookies";
 export const COOKIE_NAME = "user-profile";
 export const COOKIE_TEMP_KID_DATA = "temp-kid-data";
 export const COOKIE_SELECTED_TEMP_KID_DATA = "temp-selected-kid-data";
+export const COOKIE_KID_TYPE_DATA = "kid-type-data";
 
 export const saveProfile = (
     profile,
@@ -18,6 +19,7 @@ export const clearToken = () => {
     destroyCookie(null, COOKIE_NAME);
     clearTempKidData()
     clearSelectedTempKidData()
+    clearKidTypeData()
     localStorage.clear();
 };
 
@@ -65,5 +67,26 @@ export const retrieveSelectedTempKidData = () => {
 
 export const clearSelectedTempKidData = () => {
     destroyCookie(null, COOKIE_SELECTED_TEMP_KID_DATA);
+    localStorage.clear();
+};
+
+export const saveKidTypeData = (
+    data,
+    option
+) => {
+    let cookieOption = {
+        // maxAge: option?.maxAge || 86400,
+        path: "/",
+    };
+    setCookie(null, COOKIE_KID_TYPE_DATA, JSON.stringify(data), cookieOption);
+};
+
+export const retrieveKidTypeData = () => {
+    const cookies = parseCookies();
+    return cookies[COOKIE_KID_TYPE_DATA] ? JSON.parse(cookies[COOKIE_KID_TYPE_DATA]) : {};
+};
+
+export const clearKidTypeData = () => {
+    destroyCookie(null, COOKIE_KID_TYPE_DATA);
     localStorage.clear();
 };

@@ -24,14 +24,13 @@ import NavMenu from './components/NavMenu';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { get, size } from 'lodash';
-import { retrieveProfile, retrieveSelectedTempKidData, saveSelectedTempKidData } from 'utils/auth';
+import { retrieveProfile, retrieveSelectedTempKidData, saveKidTypeData, saveSelectedTempKidData } from 'utils/auth';
 import { getThaiDateAgeFromInput, getThaiDateAgeFromNowString, getThaiDateString } from 'utils/helper';
 const API_URL = process.env.REACT_APP_API_ENDPOINT;
 
 const drawerWidth = 240;
 
 function DrawerAppBar(props) {
-    const { window } = props;
     const [mobileOpen, setMobileOpen] = useState(false);
     const profile = retrieveProfile()
     const [kidList, setKidList] = useState([])
@@ -64,15 +63,7 @@ function DrawerAppBar(props) {
         </Box>
     );
 
-    const container = window !== undefined ? () => window().document.body : undefined;
-
-    const Item = styled(Paper)(({ theme }) => ({
-        backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-        ...theme.typography.body2,
-        padding: theme.spacing(1),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    }));
+    const container = undefined;
 
     const fetchKidData = async (request) => {
         // Call Api
@@ -267,12 +258,23 @@ function DrawerAppBar(props) {
                             </Grid>
                             <Grid item>
                                 {weightType !== "normal" && <>
-                                    {weightType === "fat" || weightType === "quite_fat" ? <Link href="">
+                                    {weightType === "fat" || weightType === "quite_fat" ? 
+                                    <Link onClick={() => {
+                                        saveKidTypeData({
+                                            type: "Over"
+                                        })
+                                        window.location.href = "/food-recommend"
+                                    }}>
                                         <Button>
                                             <img src="/Overweight.png" alt="" height={100}/>
                                         </Button>
                                     </Link> :
-                                        <Link href="">
+                                        <Link onClick={() => {
+                                            saveKidTypeData({
+                                                type: "Under"
+                                            })
+                                            window.location.href = "/food-recommend"
+                                        }}>
                                             <Button>
                                                 <img src="/Underweight.png" alt="" height={100} />
                                             </Button>
@@ -324,15 +326,5 @@ function DrawerAppBar(props) {
     );
 
 }
-
-
-
-DrawerAppBar.propTypes = {
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
-    window: PropTypes.func,
-};
 
 export default DrawerAppBar;
