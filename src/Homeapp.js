@@ -110,10 +110,11 @@ function DrawerAppBar(props) {
                   <CardWithAction
                     maxWidth='512px'
                     imgHeight='400'
-                    img="/logo.png"
+                    img="/food3_5.png"
                     actionLink="FoodMenu3_5"
                     title="สำรับอาหารวัย 3-5 ปี"
                     textButton="เลือก"
+                    
                   />
                 </div>
 
@@ -125,10 +126,11 @@ function DrawerAppBar(props) {
                   <CardWithAction
                     maxWidth='512px'
                     imgHeight='400'
-                    img="/logo.png"
+                    img="/food6_12.png"
                     actionLink="FoodMenu6_12"
                     title="สำรับอาหารวัย 6-12 ปี"
                     textButton="เลือก"
+
                   />
                 </div>
               </Item>

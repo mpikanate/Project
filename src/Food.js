@@ -42,6 +42,7 @@ const ExpandMore = styled((props) => {
 const drawerWidth = 240;
 
 function DrawerAppBar(props) {
+    
     let { foodId } = useParams();
 
     const { window } = props;

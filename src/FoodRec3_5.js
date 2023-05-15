@@ -163,7 +163,7 @@ function DrawerAppBar(props) {
                       <Item>
                         <div>
                           <CardWithAction
-                            img="/food.png"
+                           img="/food.png"
                             actionLink={`food/${item["FoodID"]}`}
                             title={item["Name"]}
                             titleSize="16px"
@@ -171,6 +171,8 @@ function DrawerAppBar(props) {
                             isFavourite={true}
                             foodId={foodId}
                             userId={userId}
+                            isNormal={false}
+                      
                           />
                         </div>
                       </Item>

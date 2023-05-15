@@ -91,6 +91,7 @@ export default function Weight_Height() {
 
             <center>
                 <div>
+                <img src="/calendar.png" alt="" width={60} height={60} />
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             label="วันที่วัดการเจริญเติบโต"
@@ -105,11 +106,13 @@ export default function Weight_Height() {
                 <br>
                 </br>
                 <div>
+                <img src="/height (1).png" alt="" width={60} height={60} />
                     <TextField id="demo-helper-text-misaligned-no-helper" label="ส่วนสูง" onChange={(e) => { setHeight(e.target.value) }} />
                 </div>
                 <br>
                 </br>
                 <div>
+                <img src="/weight (1).png" alt="" width={60} height={60} />
                     <TextField id="demo-helper-text-misaligned-no-helper" label="น้ำหนัก" onChange={(e) => { setWeight(e.target.value) }} />
                 </div>
                 <br>

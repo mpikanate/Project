@@ -161,12 +161,13 @@ function DrawerAppBar(props) {
                                         <Item>
                                             <div>
                                                 <CardWithAction
-                                                    img="/food.png"
+                                                    img="/food_morning.png"
                                                     header="อาหารเช้า"
                                                     headerSize="20px"
                                                     title={get(foodRecommend, "Morning", "")}
                                                     titleSize="16px"
                                                     isLink={false}
+                                                    isUnderOver={true}
                                                 />
                                             </div>
                                         </Item>
@@ -175,12 +176,13 @@ function DrawerAppBar(props) {
                                         <Item>
                                             <div>
                                                 <CardWithAction
-                                                    img="/food.png"
+                                                    img="/food_noon.png"
                                                     header="อาหารกลางวัน"
                                                     headerSize="20px"
                                                     title={get(foodRecommend, "Noon", "")}
                                                     titleSize="16px"
                                                     isLink={false}
+                                                    isUnderOver={true}
                                                 />
                                             </div>
                                         </Item>
@@ -189,12 +191,13 @@ function DrawerAppBar(props) {
                                         <Item>
                                             <div>
                                                 <CardWithAction
-                                                    img="/food.png"
+                                                    img="/food_evening.png"
                                                     header="อาหารเย็น"
                                                     headerSize="20px"
                                                     title={get(foodRecommend, "Evening", "")}
                                                     titleSize="16px"
                                                     isLink={false}
+                                                    isUnderOver={true}
                                                 />
                                             </div>
                                         </Item>

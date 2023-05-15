@@ -1,3 +1,4 @@
+// @ts-nocheck
 
 import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Link, Typography } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -21,7 +22,15 @@ const CardWithAction = ({
   userId = 0,
   isLink = true,
   header = "",
-  headerSize = "20px"
+  headerSize = "20px",
+  isNormal = true,
+  isUnderOver = false,
+  is3_5 = false,
+  is6_12 = false,
+  isRec = false,
+  isFav = false,
+  isSearch = false
+  
 }) => {
   const [isUserFavourite, setIsUserFavourite] = useState(false)
 
@@ -150,16 +159,68 @@ const CardWithAction = ({
       {isLink ?
         <Link href={actionLink}>
           <CardActionArea>
-            <CardMedia
+            {/* <CardMedia
               component="img"
               height={imgHeight}
-              image={img} />
+              image={img} /> */}
+
+            {/* {isUnderOver ?
+              <CardMedia
+                component="img"
+                height={imgHeight}
+                image={`/food_under_${foodId}.png`} />
+              : <CardMedia
+                component="img"
+                height={imgHeight}
+                image={`/food_${foodId}.png`} />  
+            } */}
+
+            {
+              isNormal ?
+              // Image from img parameter
+                <CardMedia
+                  component="img"
+                  height={imgHeight}
+                  image={img} />
+
+                : isUnderOver ?
+                 // Image from img under over
+                 <CardMedia
+                  component="img"
+                  height={imgHeight}
+                  image={`/food_Under_${foodId}.png`} />
+                  :
+
+                  is3_5 ? 
+                  // Image from img3_5 
+                  <CardMedia
+                    component="img"
+                    height={imgHeight}
+                    image={`/food_3_5_${foodId}.png`} />
+                    :
+                    is6_12 ?
+                      <CardMedia
+                        component="img"
+                        height={imgHeight}
+                        image={`/food_6_12_${foodId}.png`} />
+                      : 
+                      <CardMedia
+                        component="img"
+                        height={imgHeight}
+                        image={`/food_${foodId}.png`} />
+                        
+            }
+
+
+
             <CardContent>
               {title !== "" &&
                 <div style={{ fontSize: titleSize, fontFamily: 'Sarabun' }}>
                   {title}
                 </div>
               }
+
+
             </CardContent>
           </CardActionArea>
         </Link> :

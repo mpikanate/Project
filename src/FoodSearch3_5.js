@@ -209,6 +209,7 @@ function DrawerAppBar(props) {
                           isFavourite={true}
                           foodId={foodId}
                           userId={userId}
+                          isNormal={false}
                         />
                       </div>
                     </Item>
